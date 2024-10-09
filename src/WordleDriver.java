@@ -11,8 +11,8 @@ public class WordleDriver {
 		Scanner in = new Scanner(System.in);
 		boolean play = true;
 		while (play) {
-			//Wordle game = new Wordle("wordle.txt");
-			Wordle game = new Absurdle("dictLen4-10.txt");
+			Wordle game = new Wordle("wordle.txt");
+			
 			System.out.println("Welcome to the game of Wordle! The computer has picked its word,");
 			System.out.println("please begin guessing.");
 			System.out.println();

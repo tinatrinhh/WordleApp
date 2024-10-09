@@ -39,7 +39,7 @@ public class Wordle {
 	 * Loads the dictionary of words from the specified file.
 	 * 
 	 * @param filename the name of the file containing the dictionary
-	 */
+	 */ 
 	protected void loadDictionary(String filename) {
 		try (Scanner scanner = new Scanner(new File(filename))) {
 			while (scanner.hasNextLine()) {
@@ -82,25 +82,44 @@ public class Wordle {
 	        return "Error: Guessed word is not in the dictionary.";
 	    }
 
-	    currentGuess = word;
+	    currentGuess = lowerCaseWord;
 
 	    StringBuilder feedback = new StringBuilder();
-
+	    int[] correctWordCharCounts = new int[26];
+	    
+	 // First pass: Mark greens and count letters in correct word
 	    for (int i = 0; i < lowerCaseCorrectWord.length(); i++) {
 	        char guessedLetter = lowerCaseWord.charAt(i);
 	        char correctLetter = lowerCaseCorrectWord.charAt(i);
 
 	        if (guessedLetter == correctLetter) {
-	            feedback.append("G");
-	        } else if (lowerCaseCorrectWord.indexOf(guessedLetter) != -1) {
-	            feedback.append("Y");
+	            feedback.append("G"); // Green - correct letter in correct position
 	        } else {
-	            feedback.append("N");
+	            feedback.append("-");  // Placeholder for later checks
+	            correctWordCharCounts[correctLetter - 'a']++; // Count letters in correct word
+	        }
+	    }
+
+	    // Second pass: Mark yellows and grays
+	    for (int i = 0; i < lowerCaseCorrectWord.length(); i++) {
+	        if (feedback.charAt(i) == 'G') {
+	            continue; // Already processed green letters
+	        }
+
+	        char guessedLetter = lowerCaseWord.charAt(i);
+	        int letterIndex = guessedLetter - 'a';
+
+	        if (correctWordCharCounts[letterIndex] > 0) {
+	            // Mark as yellow if the letter exists in the correct word but wrong position
+	            feedback.setCharAt(i, 'Y');
+	            correctWordCharCounts[letterIndex]--; // Decrease the count for yellow usage
+	        } else {
+	            // Mark as gray if the letter is not in the correct word
+	            feedback.setCharAt(i, 'N');
 	        }
 	    }
 
 	    guessesRemaining--;
-
 	    return feedback.toString();
 	}
 	/**

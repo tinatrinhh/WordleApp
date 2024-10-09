@@ -55,8 +55,8 @@ public class WordleGUI {
 	 * Create the application.
 	 */
 	public WordleGUI() {
-		//this.game = new Wordle("wordle.txt");
-		this.game = new Absurdle("dictLen4-10.txt");
+		this.game = new Wordle("wordle.txt");
+	
 		initialize();
 	}
 
